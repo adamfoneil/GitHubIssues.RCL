@@ -1,6 +1,6 @@
 ﻿#nullable disable
 
-namespace GitHubApiClient.Models
+namespace GitHubApiClient.Models.Responses
 {
     public class Issue
     {

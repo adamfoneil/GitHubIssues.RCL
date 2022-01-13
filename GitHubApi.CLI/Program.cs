@@ -1,4 +1,5 @@
 ﻿using GitHubApiClient;
+using GitHubApiClient.Models.Requests;
 using Microsoft.Extensions.Configuration;
 
 var config = new ConfigurationBuilder()
@@ -6,9 +7,19 @@ var config = new ConfigurationBuilder()
     .Build();
 
 var client = new GitHubClient("adamfoneil", config["GitHub:Token"]);
-var results = await client.GetIssuesAsync("Hs5");
-
-foreach (var issue in results)
+//var results = await client.GetIssuesAsync("Hs5");
+var results = await client.GetIssuesAsync("Hs5", new IssuesQuery()
 {
-    Console.WriteLine(issue.title);
+    State = IssueState.Open,
+    Since = DateTime.Today.AddDays(-1)
+});
+
+foreach (var issueGrp in results.GroupBy(item => item.assignee?.login ?? "(unassigned)"))
+{
+    Console.WriteLine(issueGrp.Key);
+    foreach (var issue in issueGrp)
+    {
+        Console.WriteLine($"- {issue.number}: {issue.title}");
+    }    
+    Console.WriteLine();
 }

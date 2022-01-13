@@ -1,5 +1,7 @@
 ﻿using GitHubApiClient.Interfaces;
 using GitHubApiClient.Models;
+using GitHubApiClient.Models.Requests;
+using GitHubApiClient.Models.Responses;
 using Refit;
 using System.Text;
 
@@ -35,6 +37,6 @@ namespace GitHubApiClient
 			}
 		};
 
-		public async Task<IReadOnlyCollection<Issue>> GetIssuesAsync(string repositoryName, int page = 1) => await _api.GetIssuesAsync(_userName, repositoryName, page);		
+		public async Task<IReadOnlyCollection<Issue>> GetIssuesAsync(string repositoryName, IssuesQuery? query = null) => await _api.GetIssuesAsync(_userName, repositoryName, query);
 	}
 }
