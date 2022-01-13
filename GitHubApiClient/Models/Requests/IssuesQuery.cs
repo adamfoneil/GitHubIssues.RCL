@@ -46,7 +46,11 @@ namespace GitHubApiClient.Models.Requests
         public IssueState? State { get; set; }
         [AliasAs("sort")]
         public SortDirection? SortDirection { get; set; }
+        [AliasAs("labels")]
+        [Query(CollectionFormat = CollectionFormat.Csv)]
         public string[] Labels { get; set; }
+        [AliasAs("since")]
+        [Query(Format = "yyyy-MM-dd")]
         public DateTime? Since { get; set; }
         public int Page { get; set; } = 1;
     }
