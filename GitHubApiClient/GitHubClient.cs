@@ -45,11 +45,10 @@ namespace GitHubApiClient
 
 			List<Issue> results = new ();
 
-			query.Page = 1;
-			IEnumerable<Issue> page;
+			query.Page = 1;			
 			do
 			{
-				page = await _api.GetIssuesAsync(_userName, repositoryName, query);
+				var page = await _api.GetIssuesAsync(_userName, repositoryName, query);
 				if (!page.Any()) break;
 				results.AddRange(page);
 				query.Page++;
