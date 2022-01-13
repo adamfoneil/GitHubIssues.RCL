@@ -9,7 +9,7 @@ var config = new ConfigurationBuilder()
 
 var client = new GitHubClient("adamfoneil", config["GitHub:Token"]);
 //var results = await client.GetIssuesAsync("Hs5");
-var results = await client.GetIssuesAsync("Hs5", new IssuesQuery()
+var results = await client.GetAllIssuesAsync("Hs5", new IssuesQuery()
 {
     State = IssueState.Open,
     Since = DateTime.Today.AddDays(-5)    

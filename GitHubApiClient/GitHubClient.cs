@@ -38,5 +38,24 @@ namespace GitHubApiClient
 		};
 
 		public async Task<IReadOnlyCollection<Issue>> GetIssuesAsync(string repositoryName, IssuesQuery? query = null) => await _api.GetIssuesAsync(_userName, repositoryName, query);
+
+		public async Task<IReadOnlyCollection<Issue>> GetAllIssuesAsync(string repositoryName, IssuesQuery? query = null)
+        {
+			if (query is null) query = new IssuesQuery();
+
+			List<Issue> results = new ();
+
+			query.Page = 1;
+			IEnumerable<Issue> page;
+			do
+			{
+				page = await _api.GetIssuesAsync(_userName, repositoryName, query);
+				if (!page.Any()) break;
+				results.AddRange(page);
+				query.Page++;
+			} while (true);
+
+			return results;
+        }
 	}
 }

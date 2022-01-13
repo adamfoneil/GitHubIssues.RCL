@@ -52,6 +52,7 @@ namespace GitHubApiClient.Models.Requests
         [AliasAs("since")]
         [Query(Format = "yyyy-MM-dd")]
         public DateTime? Since { get; set; }
+        [AliasAs("page")]
         public int Page { get; set; } = 1;
     }
 }
