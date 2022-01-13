@@ -12,29 +12,20 @@ namespace GitHubApiClient
         private readonly string _token;
         private readonly IGitHubClient _api;
 
-        public GitHubClient(string userName, string token, HttpClient httpClient)
-        {
-            _userName = userName;
-            _token = token;
-            _api = RestService.For<IGitHubClient>(httpClient, GetSettings());
-        }
-
         public GitHubClient(string userName, string token)
         {
             _userName = userName;
             _token = token;
-            _api = RestService.For<IGitHubClient>("https://api.github.com", GetSettings());
-        }
-
-        private RefitSettings GetSettings() => new RefitSettings()
-        {
-            AuthorizationHeaderValueGetter = async () =>
+            _api = RestService.For<IGitHubClient>("https://api.github.com", new RefitSettings()
             {
-                var bytes = Encoding.UTF8.GetBytes($"{_userName}:{_token}");
-                var encoded = Convert.ToBase64String(bytes);
-                return await Task.FromResult(encoded);
-            }
-        };
+                AuthorizationHeaderValueGetter = async () =>
+                {
+                    var bytes = Encoding.UTF8.GetBytes($"{_userName}:{_token}");
+                    var encoded = Convert.ToBase64String(bytes);
+                    return await Task.FromResult(encoded);
+                }
+            });
+        }        
 
         public async Task<IReadOnlyCollection<Issue>> GetIssuesAsync(string repositoryName, IssuesQuery? query = null) => await _api.GetIssuesAsync(_userName, repositoryName, query);
 
