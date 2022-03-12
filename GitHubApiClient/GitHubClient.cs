@@ -1,6 +1,8 @@
 ﻿using GitHubApiClient.Interfaces;
+using GitHubApiClient.Models;
 using GitHubApiClient.Models.Requests;
 using GitHubApiClient.Models.Responses;
+using Microsoft.Extensions.Options;
 using Refit;
 using System.Text;
 
@@ -12,6 +14,10 @@ namespace GitHubApiClient
         private readonly string _token;
         private readonly IGitHubClient _api;
 
+        public GitHubClient(IOptions<Settings> settings) : this(settings.Value.UserName, settings.Value.Token)
+        {
+        }
+        
         public GitHubClient(string userName, string token)
         {
             _userName = userName;

@@ -7,7 +7,7 @@
     <UserSecretsId>33858237-e2be-420a-ab05-ca8f444ae2e2</UserSecretsId>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>AO.GitHubApi</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Company>Adam O'Neil</Company>
     <Authors>Adam O'Neil</Authors>
     <Description>A small GitHub API client made with Refit, made for some very targeted use cases</Description>
@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
     <PackageReference Include="Refit" Version="6.1.15" />
   </ItemGroup>
 
