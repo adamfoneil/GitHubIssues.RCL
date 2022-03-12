@@ -22,8 +22,6 @@ var events = (await client.GetAllEventsAsync("MyRepo",
 ```
   This says, "get events in 'MyRepo' while the total number of 'closed' events is less than 10. Then, from the all the returns events, give me the first 10 of those that are 'closed'.
 
-
-
 ## Reference
 ### [GitHubClient.cs](https://github.com/adamfoneil/GitHubIssues.RCL/blob/master/GitHubApiClient/GitHubClient.cs#L9)
 - Task\<IReadOnlyCollection\<Repository\>\> [GetMyRepositoriesAsync](https://github.com/adamfoneil/GitHubIssues.RCL/blob/master/GitHubApiClient/GitHubClient.cs#L30)
