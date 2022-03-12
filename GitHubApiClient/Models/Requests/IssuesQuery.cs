@@ -47,5 +47,10 @@ namespace GitHubApiClient.Models.Requests
         [AliasAs("labels")]
         [Query(CollectionFormat = CollectionFormat.Csv)]
         public string[] Labels { get; set; }
+        [AliasAs("sort")]
+        public SortDirection? SortDirection { get; set; }
+        [AliasAs("since")]
+        [Query(Format = "yyyy-MM-dd")]
+        public DateTime? Since { get; set; }
     }
 }

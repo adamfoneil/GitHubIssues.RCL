@@ -7,6 +7,38 @@ var config = new ConfigurationBuilder()
     .Build();
 
 var client = new GitHubClient("adamfoneil", config["GitHub:Token"]);
+
+var events = (await client.GetAllEventsAsync("Hs5", 
+    (qry, results) => results.Count(ev => ev.event_name.Equals("closed")) < 10))
+    .Where(ev => ev.event_name.Equals("closed"))
+    .Take(10);
+
+/*
+var repos = await client.GetAllMyRepositoriesAsync(new RepositoryQuery()
+{
+    Sort = RepoSortOptions.Pushed,
+    Visiblity = VisiblityOptions.Private
+});
+
+int count = 0;
+foreach (var repo in repos)
+{
+    count++;
+    Console.WriteLine($"{repo.name} ({repo.visibility})\r\n\t- {repo.url}\r\n\t- {repo.id}\r\n\t- {repo.open_issues_count} issues\r\n\t- {repo.open_issues} other issues");
+}
+
+Console.WriteLine();
+Console.WriteLine(count.ToString());
+
+return;
+*/
+
+var closed = await client.GetIssuesAsync("Hs5", new IssuesQuery()
+{
+    State = IssueState.Closed,
+    SortDirection = SortDirection.Descending
+});
+
 //var results = await client.GetIssuesAsync("Hs5");
 var results = await client.GetAllIssuesAsync("Hs5", new IssuesQuery()
 {

@@ -11,7 +11,7 @@ namespace GitHubApiClient.Models.Responses
         public string issue_url { get; set; }
         public long id { get; set; }
         public string node_id { get; set; }
-        public User user { get; set; }
+        public UserInfo user { get; set; }
         public DateTime created_at { get; set; }
         public DateTime updated_at { get; set; }
         public string author_association { get; set; }
