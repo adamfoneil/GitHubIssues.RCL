@@ -36,6 +36,12 @@ namespace GitHubApiClient
         public async Task<IReadOnlyCollection<Issue>> GetIssuesAsync(string repositoryName, IssuesQuery? query = null) => 
             await _api.GetIssuesAsync(_userName, repositoryName, query);
 
+        public async Task<IReadOnlyCollection<Issue>> GetAllIssuesAsync(string repositoryName, IssuesQuery? query = null) =>
+            await GetAllIssuesAsync(repositoryName, (query, results) => true, query);
+
+        public async Task<IReadOnlyCollection<Issue>> GetAllIssuesAsync(string repositoryName, Func<IssuesQuery, IEnumerable<Issue>, bool> shouldContine, IssuesQuery? query = null) =>
+            await EnumAllPagesAsync(async (qry) => await _api.GetIssuesAsync(_userName, repositoryName, qry), shouldContine, query ?? new IssuesQuery());
+
         public async Task<IReadOnlyCollection<IssueEvent>> GetEventsAsync(string repositoryName, BaseQuery? query = null) =>
             await _api.GetIssueEventsAsync(_userName, repositoryName, query);
 
@@ -44,12 +50,6 @@ namespace GitHubApiClient
 
         public async Task<IReadOnlyCollection<Comment>> GetCommentsAsync(string repositoryName, CommentQuery? query = null) => 
             await _api.GetCommentsAsync(_userName, repositoryName, query);
-
-        public async Task<IReadOnlyCollection<Issue>> GetAllIssuesAsync(string repositoryName, IssuesQuery? query = null) =>
-            await GetAllIssuesAsync(repositoryName, (query, results) => true, query);        
-
-        public async Task<IReadOnlyCollection<Issue>> GetAllIssuesAsync(string repositoryName, Func<IssuesQuery, IEnumerable<Issue>, bool> shouldContine, IssuesQuery? query = null) =>
-            await EnumAllPagesAsync(async (qry) => await _api.GetIssuesAsync(_userName, repositoryName, qry), shouldContine, query ?? new IssuesQuery());
 
         public async Task<IReadOnlyCollection<Comment>> GetAllCommentsAsync(string repositoryName, CommentQuery? query = null) =>
             await GetAllCommentsAsync(repositoryName, (query, results) => true, query);
