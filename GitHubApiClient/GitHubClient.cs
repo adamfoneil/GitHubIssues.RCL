@@ -25,24 +25,38 @@ namespace GitHubApiClient
                     return await Task.FromResult(encoded);
                 }
             });
-        }        
+        }
 
         public async Task<IReadOnlyCollection<Issue>> GetIssuesAsync(string repositoryName, IssuesQuery? query = null) => await _api.GetIssuesAsync(_userName, repositoryName, query);
 
-        public async Task<IReadOnlyCollection<Issue>> GetAllIssuesAsync(string repositoryName, IssuesQuery? query = null)
-        {
-            if (query is null) query = new IssuesQuery();
+        public async Task<IReadOnlyCollection<Comment>> GetCommentsAsync(string repositoryName, BaseQuery? query = null) => await _api.GetCommentsAsync(_userName, repositoryName, query);
 
-            List<Issue> results = new();
+        public async Task<IReadOnlyCollection<Issue>> GetAllIssuesAsync(string repositoryName, IssuesQuery? query = null) =>
+            await GetAllIssuesAsync(repositoryName, (query, results) => true, query);        
+
+        public async Task<IReadOnlyCollection<Issue>> GetAllIssuesAsync(string repositoryName, Func<IssuesQuery, IEnumerable<Issue>, bool> shouldContine, IssuesQuery? query = null) =>
+            await EnumAllPagesAsync(async (qry) => await _api.GetIssuesAsync(_userName, repositoryName, qry), shouldContine, query ?? new IssuesQuery());
+
+        public async Task<IReadOnlyCollection<Comment>> GetAllCommentsAsync(string repositoryName, BaseQuery? query = null) =>
+            await GetAllCommentsAsync(repositoryName, (query, results) => true, query);
+
+        public async Task<IReadOnlyCollection<Comment>> GetAllCommentsAsync(string repositoryName, Func<BaseQuery, IEnumerable<Comment>, bool> shouldContine, BaseQuery? query = null) =>
+            await EnumAllPagesAsync(async (qry) => await _api.GetCommentsAsync(_userName, repositoryName, qry), shouldContine, query ?? new BaseQuery());
+        
+        private async Task<IReadOnlyCollection<TResult>> EnumAllPagesAsync<TResult, TQuery>(Func<TQuery, Task<IEnumerable<TResult>>> fetch, Func<TQuery, IEnumerable<TResult>, bool> shouldContine, TQuery query) where TQuery : BaseQuery, new()
+        {
+            if (query is null) query = new TQuery();
+
+            List<TResult> results = new();
 
             query.Page = 1;
             do
             {
-                var page = await _api.GetIssuesAsync(_userName, repositoryName, query);
+                var page = await fetch.Invoke(query);
                 if (!page.Any()) break;
                 results.AddRange(page);
                 query.Page++;
-            } while (true);
+            } while (shouldContine.Invoke(query, results));
 
             return results;
         }

@@ -38,21 +38,14 @@ namespace GitHubApiClient.Models.Requests
         All
     }
 
-    public class IssuesQuery
+    public class IssuesQuery : BaseQuery
     {
         [AliasAs("filter")]
         public IssueFilter? Filter { get; set; }
         [AliasAs("state")]
         public IssueState? State { get; set; }
-        [AliasAs("sort")]
-        public SortDirection? SortDirection { get; set; }
         [AliasAs("labels")]
         [Query(CollectionFormat = CollectionFormat.Csv)]
         public string[] Labels { get; set; }
-        [AliasAs("since")]
-        [Query(Format = "yyyy-MM-dd")]
-        public DateTime? Since { get; set; }
-        [AliasAs("page")]
-        public int Page { get; set; } = 1;
     }
 }

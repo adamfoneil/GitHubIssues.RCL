@@ -10,8 +10,7 @@ var client = new GitHubClient("adamfoneil", config["GitHub:Token"]);
 //var results = await client.GetIssuesAsync("Hs5");
 var results = await client.GetAllIssuesAsync("Hs5", new IssuesQuery()
 {
-    State = IssueState.Open,
-    Since = DateTime.Today.AddDays(-5)
+    State = IssueState.Open
 });
 
 foreach (var issueGrp in results.GroupBy(item => item.assignee?.login ?? "(unassigned)"))
@@ -19,7 +18,8 @@ foreach (var issueGrp in results.GroupBy(item => item.assignee?.login ?? "(unass
     Console.WriteLine(issueGrp.Key);
     foreach (var issue in issueGrp)
     {
-        Console.WriteLine($"- {issue.number}: {issue.title}");
+        var labels = string.Join(", ", issue.labels.Select(l => $"[ {l.name} ]"));
+        Console.WriteLine($"- {issue.number}: {issue.title} {labels}");
     }
     Console.WriteLine();
 }
