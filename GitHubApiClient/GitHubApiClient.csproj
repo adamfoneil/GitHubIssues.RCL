@@ -7,7 +7,7 @@
     <UserSecretsId>33858237-e2be-420a-ab05-ca8f444ae2e2</UserSecretsId>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>AO.GitHubApi</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Company>Adam O'Neil</Company>
     <Authors>Adam O'Neil</Authors>
     <Description>A small GitHub API client made with Refit, made for some very targeted use cases</Description>

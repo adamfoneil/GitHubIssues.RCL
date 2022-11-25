@@ -17,8 +17,11 @@ namespace GitHubApiClient.Models.Requests
 
     public enum IssueSort
     {
+        [EnumMember(Value = "created")]
         Created,
+        [EnumMember(Value = "updated")]
         Updated,
+        [EnumMember(Value = "comments")]
         Comments
     }
 
@@ -32,9 +35,15 @@ namespace GitHubApiClient.Models.Requests
 
     public enum IssueFilter
     {
-        Assigned,
-        Created,
-        Mentioned,
+        [EnumMember(Value = "assigned")]
+        AssignedToMe,
+        [EnumMember(Value = "created")]
+        CreatedByMe,
+        [EnumMember(Value = "mentioned")]
+        MentionedMe,
+        [EnumMember(Value = "subscribed")]
+        Subscribed,
+        [EnumMember(Value = "all")]
         All
     }
 
@@ -47,10 +56,12 @@ namespace GitHubApiClient.Models.Requests
         [AliasAs("labels")]
         [Query(CollectionFormat = CollectionFormat.Csv)]
         public string[] Labels { get; set; }
-        [AliasAs("sort")]
+        [AliasAs("direction")]
         public SortDirection? SortDirection { get; set; }
         [AliasAs("since")]
         [Query(Format = "yyyy-MM-dd")]
         public DateTime? Since { get; set; }
+        [AliasAs("sort")]
+        public IssueSort? SortBy { get; set; }
     }
 }
