@@ -31,6 +31,19 @@ namespace GitHubApiClient.Models.Responses
         public Reactions reactions { get; set; }
         public string timeline_url { get; set; }
         public object performed_via_github_app { get; set; }
+
+        public string DisplayTitle => $"#{number}: {title}";
+        public bool IsOpen => state.Equals("open");
+        public bool IsClosed => state.Equals("closed");
+
+        public IEnumerable<(string Text, DateTime DateTime)> EventDates
+        {
+            get
+            {
+                yield return ("Created", created_at);
+                if (closed_at.HasValue) yield return ("Closed", closed_at.Value);
+            }
+        }
     }
 
     public class UserInfo

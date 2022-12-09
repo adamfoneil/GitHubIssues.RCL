@@ -1,10 +1,52 @@
-﻿@inject GitHubClient Client
+﻿@using Markdig;
+@inject GitHubClient Client
 
 <RadzenTabs TabPosition="TabPosition.Left">
     <Tabs>
         @foreach (var issue in Issues)
         {
-            
+            <RadzenTabsItem>
+                <Template>
+                    <div style="max-width:300px">
+                        <span>@issue.DisplayTitle</span>
+                    </div>                    
+                </Template>
+                <ChildContent>
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <h3>
+                                <span class="text-muted">#@(issue.number):</span>
+                                <span>@issue.title</span>
+                            </h3>
+                            <div>
+                                <ul class="nav">
+                                    @foreach (var item in issue.EventDates)
+                                    {
+                                        <li class="nav-item">@item.Text <span title="@item.DateTime">@item.DateTime.ElapsedRelative(DateTime.Now)</span></li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+
+                        @if (issue.IsClosed)
+                        {
+                            <div class="d-flex align-items-center ml-2">
+                                <RadzenIcon Icon="assignment_turned_in" Style="color:green" />
+                                <span class="ml-1" style="color:green">done</span>
+                            </div>
+                        }
+                    </div>
+
+                    <hr />
+
+                    @if (bodies.ContainsKey(issue.number))
+                    {
+                        <div>
+                            @bodies[issue.number]
+                        </div>
+                    }
+                </ChildContent>                
+            </RadzenTabsItem>
         }
     </Tabs>
 </RadzenTabs>
@@ -19,9 +61,21 @@
     [Parameter]
     public IssuesQuery Query { get; set; } = new();
 
+    Dictionary<int, MarkupString> bodies = new();
+
     protected override async Task OnParametersSetAsync()
     {
         Issues = await Client.GetIssuesAsync(RepositoryName, Query);
+        bodies = Issues.Select(i =>
+        {
+            var html = Markdown.ToHtml(i.body);
+            return new
+            {
+                i.number,
+                Markup = new MarkupString(html)
+            };
+        }).ToDictionary(item => item.number, item => item.Markup);
+
         StateHasChanged();
     }
 }
