@@ -1,0 +1,27 @@
+﻿@inject GitHubClient Client
+
+<RadzenTabs TabPosition="TabPosition.Left">
+    <Tabs>
+        @foreach (var issue in Issues)
+        {
+            
+        }
+    </Tabs>
+</RadzenTabs>
+
+@code {
+    [Parameter]
+    public string RepositoryName { get; set; } = default!;
+
+    [Parameter]
+    public IEnumerable<Issue> Issues { get; set; } = Enumerable.Empty<Issue>();
+
+    [Parameter]
+    public IssuesQuery Query { get; set; } = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Issues = await Client.GetIssuesAsync(RepositoryName, Query);
+        StateHasChanged();
+    }
+}
