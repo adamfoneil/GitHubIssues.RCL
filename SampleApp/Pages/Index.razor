@@ -2,4 +2,6 @@
 
 <PageTitle>Index</PageTitle>
 
-<IssueList RepositoryName="Hs5"/>
+<div style="height:100vh">
+    <IssueList RepositoryName="Hs5" Query="new IssuesQuery() { PerPage = 10, State = IssueState.Open }"/>
+</div>
